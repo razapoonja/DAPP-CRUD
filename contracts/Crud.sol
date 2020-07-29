@@ -9,7 +9,7 @@ contract Crud {
 
 	User[] public users;
 
-	uint public nextId;
+	uint public nextId = 1;
 
 	function create(string memory name) public {
 		users.push(User(nextId, name));
@@ -18,22 +18,30 @@ contract Crud {
 	}
 
 	function read(uint id) public view returns(uint, string memory) {
-		for (uint i = 0; i < users.length; i++) {
-			if (users[i].id == id) {
-				return (users[i].id, users[i].name);
-			}
-		}
+		uint i = find(id);
+
+		return (users[i].id, users[i].name);
 	}
 
 	function update(uint id, string memory name) public {
-		for (uint i = 0; i < users.length; i++) {
-			if (users[i].id == id) {
-				users[i].name = name;
-			}
-		}
+		uint i = find(id);
+
+		users[i].name = name;
 	}
 
 	function destroy(uint id) public {
-		delete users[id];
+		uint i = find(id);
+
+		delete users[i];
+	}
+
+	function find(uint id) internal view returns(uint) {
+		for (uint i = 0; i < users.length; i++) {
+			if (users[i].id == id) {
+				return i;
+			}
+		}
+
+		revert('User does not exist!');
 	}
 }
