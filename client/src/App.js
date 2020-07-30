@@ -15,6 +15,9 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3
 
+    const accounts = await web3.eth.getAccounts()
+    this.setState({ account: accounts[0] })
+
     const networkId =  await web3.eth.net.getId()
 
     const crudData = Crud.networks[networkId]
@@ -48,22 +51,35 @@ class App extends Component {
     }
   }
 
+  create = (name) => {
+    this.setState({ loading: true })
+
+    this.state.crud.methods.create(name).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.setState({ loading: false })
+    })
+  }
+
   render() {
     let content
     if(this.state.loading) {
       content = <p id="loader" className="text-center">Loading...</p>
     } else {
-      content = <Main/>
+      content = <Main 
+        create={this.create}
+      />
     }
 
     return (
       <div>
         {/* Navbar */}
 
+        <br/>
+        <br/>
+
         <main>
           {content}
         </main>
-        
+
       </div>
     );
   }
