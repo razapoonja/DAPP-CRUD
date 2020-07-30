@@ -59,6 +59,32 @@ class App extends Component {
     })
   }
 
+  read = (id) => {
+    this.setState({ loading: true })
+
+    this.state.crud.methods.read(id).call().then(result => {
+      this.setState({ loading: false })
+  
+      alert(result[1])
+    })
+  }
+
+  update = (id, name) => {
+    this.setState({ loading: true })
+
+    this.state.crud.methods.update(id, name).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.setState({ loading: false })
+    })
+  }
+
+  destroy = (id) => {
+    this.setState({ loading: true })
+
+    this.state.crud.methods.destroy(id).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.setState({ loading: false })
+    })
+  }
+
   render() {
     let content
     if(this.state.loading) {
@@ -66,6 +92,9 @@ class App extends Component {
     } else {
       content = <Main 
         create={this.create}
+        read={this.read}
+        update={this.update}
+        destroy={this.destroy}
       />
     }
 
