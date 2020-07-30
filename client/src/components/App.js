@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Crud from "./contracts/Crud.json";
 import Web3 from 'web3'
+import Crud from "../contracts/Crud.json";
 import Main from './Main'
 
 import "./App.css";
@@ -8,6 +8,8 @@ import "./App.css";
 class App extends Component {
 
   async componentWillMount() {
+    document.title = 'DAPP CRUD'
+
     await this.loadWeb3()
     await this.loadBlockchainData()
   }
@@ -105,7 +107,7 @@ class App extends Component {
         <br/>
         <br/>
 
-        <main>
+        <main className="container">
           {content}
         </main>
 
